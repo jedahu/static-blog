@@ -25,8 +25,12 @@
     select='$config/sb:est/text()'/>
   <xsl:variable name='feed-length' as='xs:integer'
     select='$config/sb:feed/sb:length/text()'/>
-  <xsl:variable name='blog-path' select='sb:content($config//sb:blog-path[1])'/>
-  <xsl:variable name='suffix' select='concat(".", sb:content($config//sb:suffix[1]))'/>
+  <xsl:variable name='blog-path'
+    select='sb:content($config//sb:blog-path[1])'/>
+  <xsl:variable name='suffix'
+    select='concat(".", sb:content($config//sb:suffix[1]))'/>
+  <xsl:variable name='html-suffix'
+    select='concat(".", sb:content($config//sb:html-suffix[1]))'/>
   <xsl:template match='/sb:config'>
     <xsl:call-template name='process-files'/>
     <xsl:call-template name='generate-feed'/>
@@ -41,7 +45,7 @@
       <xsl:choose>
         <xsl:when test='ends-with(., $suffix)'>
           <xsl:variable name='path'
-            select='concat(substring(., 1, string-length(.) - string-length($suffix)), ".html")'/>
+            select='concat(substring(., 1, string-length(.) - string-length($suffix)), $html-suffix)'/>
           <xsl:result-document href='{$path}' format='xhtml'
             xml:base='..'>
               <xsl:apply-templates select='doc(.)' mode='web'/>
@@ -95,7 +99,7 @@
     </xsl:result-document>
   </xsl:template>
   <xsl:template name='generate-latest'>
-    <xsl:result-document href='{$blog-path}/latest.html' format='xhtml-fragment'
+    <xsl:result-document href='{$blog-path}/latest{$html-suffix}' format='xhtml-fragment'
       xml:base='..'>
       <xsl:message>Generating latest</xsl:message>
       <ul>

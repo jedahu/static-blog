@@ -1,0 +1,39 @@
+#!/bin/sh
+
+FILES="$PWD/$1"
+shift
+for f in "$@"; do
+  if [ ${f:0:1} = '/' ]; then
+    FILES="$FILES $f"
+  else
+    FILES="$FILES $PWD/$f"
+  fi
+done
+
+while true; do
+  if [ -f sbrc ] || [ -f sbrc.xml ]; then
+    break
+  elif [ "$PWD" = '/' ]; then
+    echo 'No sbrc or sbrc.xml found.' >&2
+    exit 1
+  else
+    cd ..
+  fi
+done
+
+CONF='sbrc.xml'
+[ -f sbrc ] && CONF='sbrc'
+
+shopt -s extglob
+LATEST='-1'
+cd posts
+for x in +([0-9]); do
+  [ "$x" -gt "$LATEST" ] && LATEST="$x"
+done
+cd ..
+
+exec java net.sf.saxon.Transform \
+  -s:"$CONF" \
+  -xsl:"_sb/sb.xsl" \
+  latest-post="$LATEST" \
+  files="$FILES"

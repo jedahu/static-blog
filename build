@@ -31,7 +31,7 @@ for x in +([0-9]); do
 done
 cd ..
 
-exec java net.sf.saxon.Transform \
+exec java -cp "${0%/*}/saxon9he.jar" net.sf.saxon.Transform \
   -s:"$CONF" \
   -xsl:"_sb/sb.xsl" \
   latest-post="$LATEST" \

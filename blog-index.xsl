@@ -33,7 +33,7 @@
       <xsl:if test='doc-available($path)'>
         <xsl:variable name='post'
           select='doc($path)'/>
-        <article class='hentry'>
+        <article class='hentry' role='main'>
           <hgroup>
             <div class='published'>
               <a href='/{$blog-path}/{.}/'>
@@ -41,13 +41,13 @@
                   select='sb:content($post/sb:post/sb:meta/sb:ctime[1])'/>
               </a>
             </div>
-            <h2 class='entry-title'>
+            <h1 class='entry-title'>
               <a href='/{$blog-path}/{.}/'>
                 <xsl:copy-of
                   copy-namespaces='no'
                   select='$post//sb:title[1]/node()'/>
               </a>
-            </h2>
+            </h1>
           </hgroup>
           <xsl:if test='$post/sb:post/sb:summary'>
             <div class='entry-summary'>

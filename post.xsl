@@ -141,8 +141,8 @@
     <div class='non-entry'>
       <xsl:call-template name='post-nextprev'/>
       <xsl:call-template name='title-block'/>
-      <xsl:call-template name='subscribe'/>
       <xsl:call-template name='recent-posts'/>
+      <xsl:call-template name='subscribe'/>
     </div>
   </xsl:template>
   <xsl:template name='post-nextprev' xml:base='..'>

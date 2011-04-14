@@ -38,12 +38,12 @@
       <div>
         <label for='comment_author'>Name</label>
         <input type='text' name='comment_author'
-          placeholder='Your Name' required='required'/> Required.
+          required='required'/> Required.
       </div>
       <div>
         <label for='comment_author_email'>Email</label>
         <input type='email' name='comment_author_email'
-          placeholder='Your Email' required='required'/> Required but not displayed.
+          required='required'/> Required but not displayed.
       </div>
       <div>
         <label for='comment_author_url'>URL</label>

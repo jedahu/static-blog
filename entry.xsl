@@ -6,7 +6,6 @@
   xmlns='http://www.w3.org/1999/xhtml'
   xpath-default-namespace='http://www.w3.org/1999/xhtml'
   exclude-result-prefixes='sb'>
-  <xsl:output method='xml' indent='yes'/>
   <xsl:template match='/sb:post' mode='feed'>
     <a:entry>
       <a:title>

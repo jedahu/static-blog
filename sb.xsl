@@ -44,8 +44,18 @@
       </xsl:message>
       <xsl:choose>
         <xsl:when test='ends-with(., $suffix)'>
+          <xsl:variable name='out-suffix'>
+            <xsl:choose>
+              <xsl:when test='ends-with(., concat(".html", $suffix))'>
+                <xsl:value-of select='""'/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select='$html-suffix'/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
           <xsl:variable name='path'
-            select='concat(substring(., 1, string-length(.) - string-length($suffix)), $html-suffix)'/>
+            select='concat(substring(., 1, string-length(.) - string-length($suffix)), $out-suffix)'/>
           <xsl:result-document href='{$path}' format='xhtml'
             xml:base='..'>
               <xsl:apply-templates select='doc(.)' mode='web'/>

@@ -18,6 +18,7 @@
   <xsl:include href='post.xsl'/>
   <xsl:include href='blog-index.xsl'/>
   <xsl:include href='entry.xsl'/>
+  <xsl:include href='redirect.xsl'/>
   <xsl:variable name='config' select='/sb:config'/>
   <xsl:variable name='domain'
     select='$config/sb:domain/text()'/>

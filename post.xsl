@@ -37,7 +37,7 @@
   <xsl:template name='post-article'>
     <article class='hentry' role='main'>
       <xsl:call-template name='post-article-header'/>
-      <xsl:call-template name='post-article-summary'/>
+      <!--xsl:call-template name='post-article-summary'/-->
       <xsl:call-template name='post-article-content'/>
       <xsl:call-template name='post-article-footer'/>
     </article>
@@ -47,23 +47,33 @@
       <xsl:copy-of
         copy-namespaces='no'
         select='//sb:title[1]/node()'/>
+      <xsl:if test='/sb:post/sb:summary'>
+        <a class='note' href='#note-title'>*</a>
+      </xsl:if>
     </h1>
   </xsl:template>
-  <xsl:template name='post-article-summary'>
-    <xsl:if test='//sb:summary'>
+  <!--xsl:template name='post-article-summary'>
+    <xsl:if test='/sb:post/sb:summary'>
       <div class='entry-summary'>
         <xsl:copy-of copy-namespaces='no'
-          select='//sb:summary[1]/node()'/>
+          select='/sb:post/sb:summary[1]/node()'/>
       </div>
     </xsl:if>
-  </xsl:template>
+  </xsl:template-->
   <xsl:template name='post-article-content'>
     <div class='entry-content'>
       <xsl:apply-templates select='/sb:post/sb:content/node()'
         mode='web'/>
       <aside>
-        <xsl:if test='/sb:post/sb:content//sb:note'>
+        <xsl:if test='/sb:post/sb:content//sb:note|/sb:post/sb:summary'>
           <dl class='notes'>
+            <xsl:if test='/sb:post/sb:summary'>
+              <dt>*</dt>
+              <dd id='note-title'>
+                <xsl:copy-of copy-namespaces='no'
+                  select='/sb:post/sb:summary[1]/node()'/>
+              </dd>
+            </xsl:if>
             <xsl:for-each select='/sb:post/sb:content//sb:note'>
               <dt>
                 <xsl:value-of select='position()'/>

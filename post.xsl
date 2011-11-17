@@ -87,6 +87,7 @@
       </aside>
     </div>
   </xsl:template>
+  <xsl:template name='post-suffix'/>
   <xsl:template name='post-article-footer'>
     <footer class='entry-meta'>
       <xsl:call-template name='post-authors'/>
@@ -94,6 +95,7 @@
       <xsl:call-template name='post-attrib'/>
       <xsl:call-template name='post-ctime'/>
       <xsl:call-template name='post-mtime'/>
+      <xsl:call-template name='post-suffix'/>
     </footer>
   </xsl:template>
   <xsl:template name='post-authors'>

@@ -9,22 +9,26 @@
 
   <xsl:param name='comment-instructions'/>
 
+  <xsl:template name='do-post-comments'>
+    <section class='comments'>
+      <xsl:if test='not(sb:comments-allowed(/sb:post))'>
+        <div class='notice'>Comments are closed.</div>
+      </xsl:if>
+      <div role='header'>Comments</div>
+      <div class='comment-content'>
+        <xsl:if test='sb:comments-allowed(/sb:post)'>
+          <xsl:copy-of select='$comment-instructions'/>
+          <xsl:call-template name='comment-reply-form'/>
+        </xsl:if>
+        <xsl:apply-templates select='//sb:comments/sb:comment' mode='comment'/>
+      </div>
+      <div class='sentinel'/>
+    </section>
+  </xsl:template>
+
   <xsl:template name='post-comments'>
     <xsl:if test='sb:comments-allowed(/sb:post) or sb:comments-exist(/sb:post)'>
-      <section class='comments'>
-        <xsl:if test='not(sb:comments-allowed(/sb:post))'>
-          <div class='notice'>Comments are closed.</div>
-        </xsl:if>
-        <div role='header'>Comments</div>
-        <div class='comment-content'>
-          <xsl:if test='sb:comments-allowed(/sb:post)'>
-            <xsl:copy-of select='$comment-instructions'/>
-            <xsl:call-template name='comment-reply-form'/>
-          </xsl:if>
-          <xsl:apply-templates select='//sb:comments/sb:comment' mode='comment'/>
-        </div>
-      <div class='sentinel'/>
-      </section>
+      <xsl:call-template name='do-post-comments'/>
     </xsl:if>
   </xsl:template>
 

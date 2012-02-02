@@ -258,7 +258,9 @@
       <xsl:number level='any'/>
     </xsl:variable>
     <a class='note' href='#note{$n}'>
-      <xsl:value-of select='$n'/>
+      <sup>
+        <xsl:value-of select='$n'/>
+      </sup>
     </a>
   </xsl:template>
 </xsl:stylesheet>

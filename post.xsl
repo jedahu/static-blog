@@ -29,9 +29,13 @@
   </xsl:template>
   <xsl:template name='post-body'>
     <body>
+      <xsl:copy-of copy-namespaces='no'
+        select='$config/sb:header/*'/>
       <xsl:call-template name='post-article'/>
       <xsl:call-template name='post-comments'/>
       <xsl:call-template name='post-other'/>
+      <xsl:copy-of copy-namespaces='no'
+        select='$config/sb:footer/*'/>
     </body>
   </xsl:template>
   <xsl:template name='post-article'>

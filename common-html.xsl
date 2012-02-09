@@ -23,7 +23,7 @@
       content='{sb:content($config/sb:title[1])}'/>
     <xsl:copy-of
       copy-namespaces='no'
-      select='$config/sb:meta/h:*'/>
+      select='$config/h:head/h:*'/>
     <xsl:copy-of
       copy-namespaces='no'
       select='//sb:meta/h:*'/>

@@ -46,7 +46,7 @@
   </xsl:template>
   <xsl:template match='sb:artifact'>
     <a href='{@href}'>
-      <xsl:copy-of select='node()'/>
+      <xsl:copy-of copy-namespaces='no' select='node()'/>
     </a>
   </xsl:template>
   <xsl:template match='sb:author' mode='feed'>

@@ -209,17 +209,17 @@
   </xsl:template>
   <xsl:template match='sb:artifact' mode='web'>
     <a href='{@href}' class='artifact'>
-      <xsl:copy-of select='node()'/>
+      <xsl:copy-of copy-namespaces='no' select='node()'/>
     </a>
   </xsl:template>
   <xsl:template match='sb:creator' mode='web'>
     <a href='{@href}' class='creator'>
-      <xsl:copy-of select='node()'/>
+      <xsl:copy-of copy-namespaces='no' select='node()'/>
     </a>
   </xsl:template>
   <xsl:template match='sb:license' mode='web'>
     <a href='{@href}' class='license'>
-      <xsl:copy-of select='node()'/>
+      <xsl:copy-of copy-namespaces='no' select='node()'/>
     </a>
   </xsl:template>
   <xsl:template match='sb:author' mode='web'>

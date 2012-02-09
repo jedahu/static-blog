@@ -105,7 +105,7 @@
               for $x in $entries//a:updated/text()
               return normalize-space($x))'/>
         </a:updated>
-        <xsl:copy-of select='$entries'/>
+        <xsl:copy-of copy-namespaces='no' select='$entries'/>
       </a:feed>
     </xsl:result-document>
   </xsl:template>

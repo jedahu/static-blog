@@ -17,7 +17,8 @@
       <div role='header'>Comments</div>
       <div class='comment-content'>
         <xsl:if test='sb:comments-allowed(/sb:post)'>
-          <xsl:copy-of select='$comment-instructions'/>
+          <xsl:copy-of copy-namespaces='no'
+            select='$comment-instructions'/>
           <xsl:call-template name='comment-reply-form'/>
         </xsl:if>
         <xsl:apply-templates select='//sb:comments/sb:comment' mode='comment'/>
@@ -112,7 +113,7 @@
 
   <xsl:template match='sb:comment/sb:content' mode='comment'>
     <div class='content'>
-      <xsl:copy-of select='h:*'/>
+      <xsl:copy-of copy-namespaces='no' select='h:*'/>
     </div>
   </xsl:template>
 

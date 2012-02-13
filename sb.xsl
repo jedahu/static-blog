@@ -14,6 +14,7 @@
   <xsl:output method='html' indent='yes' name='html'/>
   <xsl:output method='xhtml' indent='yes' name='xhtml-fragment'
     omit-xml-declaration='yes'/>
+  <xsl:output method='html' indent='yes' name='html-fragment'/>
   <xsl:include href='common-html.xsl'/>
   <xsl:include href='post.xsl'/>
   <xsl:include href='blog-index.xsl'/>
@@ -60,7 +61,7 @@
               </xsl:variable>
               <xsl:variable name='path'
                 select='concat(substring(., 1, string-length(.) - string-length($suffix)), $out-suffix)'/>
-              <xsl:result-document href='{$path}' format='xhtml'
+              <xsl:result-document href='{$path}' format='html'
                 xml:base='..'>
                 <xsl:apply-templates select='$pdoc' mode='web'/>
               </xsl:result-document>
@@ -117,7 +118,7 @@
     </xsl:result-document>
   </xsl:template>
   <xsl:template name='generate-latest'>
-    <xsl:result-document href='{$blog-path}/latest/index{$html-suffix}' format='xhtml-fragment'
+    <xsl:result-document href='{$blog-path}/latest/index{$html-suffix}' format='html-fragment'
       xml:base='..'>
       <xsl:message>Generating latest</xsl:message>
       <ul>

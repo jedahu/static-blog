@@ -22,7 +22,7 @@
     <head>
       <xsl:call-template name='common-head'/>
       <link rel='canonical' href='{sb:canonical_url(/sb:post)}'/>
-      <meta name='entry-id' content='sb:entry-id(/sb:post)'/>
+      <meta name='entry-id' content='{sb:entry-id(/sb:post)}'/>
       <script type='text/javascript' src='/lf/post.js'>
       </script>
     </head>

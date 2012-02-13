@@ -29,7 +29,7 @@
       select='//sb:meta/h:*'/>
   </xsl:template>
   <xsl:template match='@*|node()' mode='web'>
-    <xsl:copy>
+    <xsl:copy copy-namespaces='no'>
       <xsl:apply-templates select='@*|node()' mode='web'/>
     </xsl:copy>
   </xsl:template>

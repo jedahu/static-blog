@@ -33,30 +33,32 @@
       <xsl:if test='doc-available($path)'>
         <xsl:variable name='post'
           select='doc($path)'/>
-        <article class='hentry' role='main'>
-          <hgroup>
-            <div class='published'>
-              <a href='/{$blog-path}/{.}/'>
-                <xsl:value-of
-                  select='sb:content($post/sb:post/sb:meta/sb:ctime[1])'/>
-              </a>
-            </div>
-            <h1 class='entry-title'>
-              <a href='/{$blog-path}/{.}/'>
+        <xsl:if test='not($post/sb:post/@draft)'>
+          <article class='hentry' role='main'>
+            <hgroup>
+              <div class='published'>
+                <a href='/{$blog-path}/{.}/'>
+                  <xsl:value-of
+                    select='sb:content($post/sb:post/sb:meta/sb:ctime[1])'/>
+                </a>
+              </div>
+              <h1 class='entry-title'>
+                <a href='/{$blog-path}/{.}/'>
+                  <xsl:copy-of
+                    copy-namespaces='no'
+                    select='$post//sb:title[1]/node()'/>
+                </a>
+              </h1>
+            </hgroup>
+            <xsl:if test='$post/sb:post/sb:summary'>
+              <div class='entry-summary'>
                 <xsl:copy-of
                   copy-namespaces='no'
-                  select='$post//sb:title[1]/node()'/>
-              </a>
-            </h1>
-          </hgroup>
-          <xsl:if test='$post/sb:post/sb:summary'>
-            <div class='entry-summary'>
-              <xsl:copy-of
-                copy-namespaces='no'
-                select='$post/sb:post/sb:summary/node()'/>
-            </div>
-          </xsl:if>
-        </article>
+                  select='$post/sb:post/sb:summary/node()'/>
+              </div>
+            </xsl:if>
+          </article>
+        </xsl:if>
       </xsl:if>
     </xsl:for-each>
   </xsl:template>

@@ -179,10 +179,13 @@
           </a>
         </xsl:if>
         <xsl:if test='doc-available($npp)'>
-          <a class='next' href='/{$np}'>
-            <xsl:value-of
-              select='sb:content(doc($npp)//sb:title[1])'/>
-          </a>
+          <xsl:variable name='ndoc' select='doc($npp)'/>
+          <xsl:if test='not($ndoc/sb:post/@draft)'>
+            <a class='next' href='/{$np}'>
+              <xsl:value-of
+                select='sb:content(doc($npp)//sb:title[1])'/>
+            </a>
+          </xsl:if>
         </xsl:if>
       </div>
     </xsl:if>

@@ -40,31 +40,36 @@
   <xsl:template name='process-files'>
     <xsl:message>Processing files</xsl:message>
     <xsl:for-each select='sb:include-adjacent-posts(tokenize($files, "\s+"))'>
-      <xsl:message>
-        <xsl:value-of select='.'/>
-      </xsl:message>
-      <xsl:choose>
-        <xsl:when test='ends-with(., $suffix)'>
-          <xsl:variable name='out-suffix'>
-            <xsl:choose>
-              <xsl:when test='ends-with(., concat(".html", $suffix))'>
-                <xsl:value-of select='""'/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select='$html-suffix'/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
-          <xsl:variable name='path'
-            select='concat(substring(., 1, string-length(.) - string-length($suffix)), $out-suffix)'/>
-          <xsl:result-document href='{$path}' format='xhtml'
-            xml:base='..'>
-              <xsl:apply-templates select='doc(.)' mode='web'/>
-          </xsl:result-document>
-        </xsl:when>
-        <xsl:otherwise>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:if test='doc-available(.)'>
+        <xsl:variable name='pdoc' select='doc(.)'/>
+        <xsl:if test='not($pdoc/sb:post/@draft)'>
+          <xsl:message>
+            <xsl:value-of select='.'/>
+          </xsl:message>
+          <xsl:choose>
+            <xsl:when test='ends-with(., $suffix)'>
+              <xsl:variable name='out-suffix'>
+                <xsl:choose>
+                  <xsl:when test='ends-with(., concat(".html", $suffix))'>
+                    <xsl:value-of select='""'/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select='$html-suffix'/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <xsl:variable name='path'
+                select='concat(substring(., 1, string-length(.) - string-length($suffix)), $out-suffix)'/>
+              <xsl:result-document href='{$path}' format='xhtml'
+                xml:base='..'>
+                <xsl:apply-templates select='$pdoc' mode='web'/>
+              </xsl:result-document>
+            </xsl:when>
+            <xsl:otherwise>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:if>
+      </xsl:if>
     </xsl:for-each>
   </xsl:template>
   <xsl:template name='generate-feed'>
@@ -77,8 +82,10 @@
           <xsl:variable name='path'
             select='concat($blog-path, "/", ., "/index", $suffix)'/>
           <xsl:if test='doc-available($path)'>
-            <xsl:apply-templates mode='feed'
-              select='doc($path)'/>
+            <xsl:variable name='pdoc' select='doc($path)'/>
+            <xsl:if test='not($pdoc/sb:post/@draft)'>
+              <xsl:apply-templates mode='feed' select='$pdoc'/>
+            </xsl:if>
           </xsl:if>
         </xsl:for-each>
       </xsl:variable>
@@ -119,19 +126,22 @@
           <xsl:variable name='path'
             select='concat($blog-path, "/", ., "/index", $suffix)'/>
           <xsl:if test='doc-available($path)'>
-            <xsl:variable name='post' select='doc($path)/sb:post'/>
-            <li>
-              <a href='/{$blog-path}/{.}/'>
-                <span class='published'>
-                  <xsl:value-of
-                    select='sb:content($post/sb:meta/sb:ctime[1])'/>
-                </span>
-                <span class='title'>
-                  <xsl:value-of
-                    select='sb:content($post//sb:title[1])'/>
-                </span>
-              </a>
-            </li>
+            <xsl:variable name='pdoc' select='doc($path)'/>
+            <xsl:if test='not($pdoc/sb:post/@draft)'>
+              <xsl:variable name='post' select='$pdoc/sb:post'/>
+              <li>
+                <a href='/{$blog-path}/{.}/'>
+                  <span class='published'>
+                    <xsl:value-of
+                      select='sb:content($post/sb:meta/sb:ctime[1])'/>
+                  </span>
+                  <span class='title'>
+                    <xsl:value-of
+                      select='sb:content($post//sb:title[1])'/>
+                  </span>
+                </a>
+              </li>
+            </xsl:if>
           </xsl:if>
         </xsl:for-each>
       </ul>

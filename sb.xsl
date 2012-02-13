@@ -110,7 +110,7 @@
     </xsl:result-document>
   </xsl:template>
   <xsl:template name='generate-latest'>
-    <xsl:result-document href='{$blog-path}/latest{$html-suffix}' format='xhtml-fragment'
+    <xsl:result-document href='{$blog-path}/latest/index{$html-suffix}' format='xhtml-fragment'
       xml:base='..'>
       <xsl:message>Generating latest</xsl:message>
       <ul>

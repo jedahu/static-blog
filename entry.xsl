@@ -26,7 +26,7 @@
       </a:updated>
       <xsl:apply-templates
         mode='feed'
-        select='if (//sb:author) then //sb:author else $config/sb:author'/>
+        select='if (/sb:post/sb:meta/sb:author) then /sb:post/sb:meta/sb:author else $config/sb:author'/>
       <xsl:apply-templates
         mode='feed'
         select='//sb:contributor'/>

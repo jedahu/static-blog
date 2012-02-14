@@ -7,7 +7,7 @@
   xmlns='http://www.w3.org/1999/xhtml'
   xpath-default-namespace='http://www.w3.org/1999/xhtml'
   exclude-result-prefixes='h sb a xs'>
-  <xsl:param name='files'/>
+  <xsl:param name='sbrc'/>
   <xsl:param name='latest-post' as='xs:integer' required='yes'/>
   <xsl:output method='xml' indent='yes' name='xml'/>
   <xsl:output method='xhtml' indent='yes' name='xhtml'/>
@@ -20,7 +20,7 @@
   <xsl:include href='blog-index.xsl'/>
   <xsl:include href='entry.xsl'/>
   <xsl:include href='redirect.xsl'/>
-  <xsl:variable name='config' select='/sb:config'/>
+  <xsl:variable name='config' select='doc($sbrc)/sb:config'/>
   <xsl:variable name='domain'
     select='$config/sb:domain/text()'/>
   <xsl:variable name='est'
@@ -33,14 +33,17 @@
     select='concat(".", sb:content($config//sb:suffix[1]))'/>
   <xsl:variable name='html-suffix'
     select='concat(".", sb:content($config//sb:html-suffix[1]))'/>
-  <xsl:template match='/sb:config'>
+  <xsl:variable name='feed-path' select='concat($blog-path, "/feed/index.xml")'/>
+  <xsl:variable name='latest-fragment-path' select='concat($blog-path, "/latest/index", $html-suffix)'/>
+  <xsl:variable name='files' select='tokenize(/sb:files/text(), "\s+")'/>
+  <xsl:template match='/sb:files'>
     <xsl:call-template name='process-files'/>
     <xsl:call-template name='generate-feed'/>
     <xsl:call-template name='generate-latest'/>
   </xsl:template>
   <xsl:template name='process-files'>
     <xsl:message>Processing files</xsl:message>
-    <xsl:for-each select='sb:include-adjacent-posts(tokenize($files, "\s+"))'>
+    <xsl:for-each select='sb:include-adjacent-posts($files)'>
       <xsl:if test='doc-available(.)'>
         <xsl:variable name='pdoc' select='doc(.)'/>
         <xsl:if test='not($pdoc/sb:post/@draft)'>
@@ -74,9 +77,9 @@
     </xsl:for-each>
   </xsl:template>
   <xsl:template name='generate-feed'>
-    <xsl:result-document href='{$blog-path}/feed/index.xml' format='xml'
+    <xsl:result-document href='{$feed-path}' format='xml'
       xml:base='..'>
-      <xsl:message>Generating feed</xsl:message>
+      <xsl:message>Generating feed at <xsl:value-of select='$feed-path'/></xsl:message>
       <xsl:variable name='entries'>
         <xsl:for-each
           select='reverse(max((1, $latest-post - $feed-length)) to $latest-post)'>
@@ -118,9 +121,9 @@
     </xsl:result-document>
   </xsl:template>
   <xsl:template name='generate-latest'>
-    <xsl:result-document href='{$blog-path}/latest/index{$html-suffix}' format='html-fragment'
+    <xsl:result-document href='{$latest-fragment-path}' format='html-fragment'
       xml:base='..'>
-      <xsl:message>Generating latest</xsl:message>
+      <xsl:message>Generating latest fragment at <xsl:value-of select='$latest-fragment-path'/></xsl:message>
       <ul>
         <xsl:for-each
           select='reverse(max((1, $latest-post - $feed-length)) to $latest-post)'>

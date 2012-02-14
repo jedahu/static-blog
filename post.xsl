@@ -10,7 +10,7 @@
   <xsl:template match='/sb:post' mode='web'>
     <xsl:if test='not(matches(/sb:post/@n, "[0-9]+|draft"))'>
       <xsl:message terminate='yes'>
-        /sb:post/@n required and must be a positive integer or 'draft'..
+        /sb:post/@n required and must be a positive integer.
       </xsl:message>
     </xsl:if>
     <html lang='EN' xml:lang='EN'>

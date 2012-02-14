@@ -1,13 +1,6 @@
 #!/bin/sh
 
-FILES=""
-for f in "$@"; do
-  if [ ${f:0:1} = '/' ]; then
-    FILES="$FILES $f"
-  else
-    FILES="$FILES $PWD/$f"
-  fi
-done
+CDPATH=''
 
 while true; do
   if [ -f sbrc ] || [ -f sbrc.xml ]; then
@@ -20,8 +13,8 @@ while true; do
   fi
 done
 
-CONF='sbrc.xml'
-[ -f sbrc ] && CONF='sbrc'
+CONF="$(pwd)/sbrc.xml"
+[ -f sbrc ] && CONF="$(pwd)/sbrc"
 
 shopt -s extglob
 LATEST='-1'
@@ -31,8 +24,14 @@ for x in +([0-9]); do
 done
 cd ..
 
-exec java -cp "${0%/*}/saxon9he.jar" net.sf.saxon.Transform \
-  -s:"$CONF" \
+(echo '<files xmlns="http://github.com/jedahu/static-blog">'
+while read f; do
+  echo "$(pwd)/$f"
+done
+echo '</files>') | \
+  java -cp "${0%/*}/saxon9he.jar" net.sf.saxon.Transform \
+  -s:- \
   -xsl:"_sb/sb.xsl" \
+  sbrc="$CONF" \
   latest-post="$LATEST" \
   files="$FILES"

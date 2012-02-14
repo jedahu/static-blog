@@ -1,0 +1,17 @@
+http {
+  server {
+    listen <%= ENV['PORT'] %>;
+    index index.html;
+    charset UTF-8;
+    root /app;
+    location / {
+      if (-d $request_filename) {
+        rewrite ^/(.*[^/])$ http://jed.onjesus.net/$1/ permanent;
+      }
+    }
+  }
+}
+events {
+  worker_connections 4096;
+}
+daemon off;

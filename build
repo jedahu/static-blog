@@ -26,7 +26,11 @@ cd ..
 
 (echo '<files xmlns="http://github.com/jedahu/static-blog">'
 while read f; do
-  echo "$(pwd)/$f"
+  if [ ${f:0:1} = '/' ]; then
+    echo "$f"
+  else
+    echo "$(pwd)/$f"
+  fi
 done
 echo '</files>') | \
   java -cp "${0%/*}/saxon9he.jar" net.sf.saxon.Transform \

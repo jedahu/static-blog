@@ -173,7 +173,7 @@
         <xsl:variable name='npp'
           select='concat($np, "/index", $suffix)'/>
         <xsl:if test='doc-available($ppp)'>
-          <a class='prev' href='/{$pp}'>
+          <a class='prev' href='/{$pp}/'>
             <xsl:value-of
               select='sb:content(doc($ppp)//sb:title[1])'/>
           </a>
@@ -181,7 +181,7 @@
         <xsl:if test='doc-available($npp)'>
           <xsl:variable name='ndoc' select='doc($npp)'/>
           <xsl:if test='not($ndoc/sb:post/@draft)'>
-            <a class='next' href='/{$np}'>
+            <a class='next' href='/{$np}/'>
               <xsl:value-of
                 select='sb:content(doc($npp)//sb:title[1])'/>
             </a>

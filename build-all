@@ -1,9 +1,0 @@
-#!/bin/bash
-
-set -e
-set -u
-CDPATH=''
-
-cd "$1"
-find "$1" -name \*.sb | "$1/__sb/build"                        
-bundle exec compass compile "$1"

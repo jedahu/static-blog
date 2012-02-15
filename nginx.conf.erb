@@ -1,7 +1,7 @@
 http {
   server {
     listen <%= ENV['PORT'] %>;
-    index index.html;
+    index index.html index.xhtml index.xml =404;
     charset UTF-8;
     root /app;
     location / {

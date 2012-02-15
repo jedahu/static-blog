@@ -51,6 +51,7 @@
   <xsl:template name='find-latest-post'>
     <xsl:param name='n' select='1'/>
     <xsl:variable name='path' select='concat($root, "/", $blog-path, "/", $n, "/index.sb")'/>
+    <xsl:message>Path: <xsl:value-of select='$path'/></xsl:message>
     <xsl:choose>
       <xsl:when test='doc-available($path) and not(doc($path)/sb:post/@draft)'>
         <xsl:call-template name='find-latest-post'>
@@ -104,7 +105,7 @@
     </xsl:for-each>
   </xsl:template>
   <xsl:template name='generate-feed'>
-    <xsl:result-document href='{$feed-path}' format='xml'
+    <xsl:result-document href='{$root}/{$feed-path}' format='xml'
       xml:base='..'>
       <xsl:message>Generating feed at <xsl:value-of select='$feed-path'/></xsl:message>
       <xsl:variable name='entries'>
@@ -148,7 +149,7 @@
     </xsl:result-document>
   </xsl:template>
   <xsl:template name='generate-latest'>
-    <xsl:result-document href='{$latest-fragment-path}' format='html-fragment'
+    <xsl:result-document href='{$root}/{$latest-fragment-path}' format='html-fragment'
       xml:base='..'>
       <xsl:message>Generating latest fragment at <xsl:value-of select='$latest-fragment-path'/></xsl:message>
       <ul>

@@ -1,28 +1,27 @@
 #!/bin/bash
 
+set -e
+set -u
 CDPATH=''
+ROOT="${0%/*}/.."
 
 SAXON_URL=http://jedatwork.s3.amazonaws.com/blobs/saxon9he.jar
 
-if [ ! -d __sb ]; then
-  echo 'Not in project root. Aborting..'
+if [ ! -f "$ROOT/__sb/saxon9he.jar" ]; then
+  curl "$SAXON_URL" >"$ROOT/__sb/saxon9he.jar"
+fi
+
+CONF="$ROOT/sbrc.xml"
+[ -f "$ROOT/sbrc" ] && CONF="$ROOT/sbrc"
+if [ ! -f "$CONF" ]; then
+  echo "No sbrc found. Aborting.."
   exit 1
 fi
 
-if [ ! -f __sb/saxon9he.jar ]; then
-  curl "$SAXON_URL" >__sb/saxon9he.jar
-fi
-
-CONF="$(pwd)/sbrc.xml"
-[ -f sbrc ] && CONF="$(pwd)/sbrc"
-
-shopt -s extglob
-LATEST='-1'
-cd posts
-for x in +([0-9]); do
-  [ "$x" -gt "$LATEST" ] && LATEST="$x"
+LATEST='1'
+while [ -f "$ROOT/posts/$LATEST/index.sb" ]; do
+  LATEST=$(($LATEST + 1))
 done
-cd ..
 
 (echo '<files xmlns="http://github.com/jedahu/static-blog">'
 while read f; do
@@ -33,9 +32,8 @@ while read f; do
   fi
 done
 echo '</files>') | \
-  java -cp __sb/saxon9he.jar net.sf.saxon.Transform \
+  java -cp "$ROOT/__sb/saxon9he.jar" net.sf.saxon.Transform \
   -s:- \
-  -xsl:_sb/sb.xsl \
+  -xsl:"$ROOT/_sb/sb.xsl" \
   sbrc="$CONF" \
-  latest-post="$LATEST" \
-  files="$FILES"
+  latest-post="$LATEST"

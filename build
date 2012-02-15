@@ -2,16 +2,16 @@
 
 CDPATH=''
 
-while true; do
-  if [ -f sbrc ] || [ -f sbrc.xml ]; then
-    break
-  elif [ "$PWD" = '/' ]; then
-    echo 'No sbrc or sbrc.xml found.' >&2
-    exit 1
-  else
-    cd ..
-  fi
-done
+SAXON_URL=http://jedatwork.s3.amazonaws.com/blobs/saxon9he.jar
+
+if [ ! -d __sb ]; then
+  echo 'Not in project root. Aborting..'
+  exit 1
+fi
+
+if [ ! -f __sb/saxon9he.jar ]; then
+  curl "$SAXON_URL" >__sb/saxon9he.jar
+fi
 
 CONF="$(pwd)/sbrc.xml"
 [ -f sbrc ] && CONF="$(pwd)/sbrc"
@@ -33,9 +33,9 @@ while read f; do
   fi
 done
 echo '</files>') | \
-  java -cp "${0%/*}/saxon9he.jar" net.sf.saxon.Transform \
+  java -cp __sb/saxon9he.jar net.sf.saxon.Transform \
   -s:- \
-  -xsl:"_sb/sb.xsl" \
+  -xsl:_sb/sb.xsl \
   sbrc="$CONF" \
   latest-post="$LATEST" \
   files="$FILES"

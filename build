@@ -8,6 +8,7 @@ ROOT="${0%/*}/.."
 SAXON_URL=http://jedatwork.s3.amazonaws.com/blobs/saxon9he.jar
 
 if [ ! -f "$ROOT/__sb/saxon9he.jar" ]; then
+  echo 'Downloading saxon..'
   curl "$SAXON_URL" >"$ROOT/__sb/saxon9he.jar"
 fi
 

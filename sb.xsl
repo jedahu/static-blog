@@ -40,7 +40,7 @@
   <xsl:variable name='feed-length' as='xs:integer'
     select='$config/sb:feed/sb:length/text()'/>
   <xsl:variable name='blog-path'
-    select='concat($root, "/", sb:content($config//sb:blog-path[1]))'/>
+    select='sb:content($config//sb:blog-path[1])'/>
   <xsl:variable name='suffix'
     select='concat(".", sb:content($config//sb:suffix[1]))'/>
   <xsl:variable name='html-suffix'
@@ -50,7 +50,7 @@
   <xsl:variable name='files' select='tokenize(/sb:files/text(), "\s+")'/>
   <xsl:template name='find-latest-post'>
     <xsl:param name='n' select='1'/>
-    <xsl:variable name='path' select='concat($blog-path, "/", $n, "/index.sb")'/>
+    <xsl:variable name='path' select='concat($root, "/", $blog-path, "/", $n, "/index.sb")'/>
     <xsl:choose>
       <xsl:when test='doc-available($path) and not(doc($path)/sb:post/@draft)'>
         <xsl:call-template name='find-latest-post'>
@@ -111,7 +111,7 @@
         <xsl:for-each
           select='reverse(max((1, $latest-post - $feed-length)) to $latest-post)'>
           <xsl:variable name='path'
-            select='concat($blog-path, "/", ., "/index", $suffix)'/>
+            select='concat($root, "/", $blog-path, "/", ., "/index", $suffix)'/>
           <xsl:if test='doc-available($path)'>
             <xsl:variable name='pdoc' select='doc($path)'/>
             <xsl:if test='not($pdoc/sb:post/@draft)'>
@@ -155,7 +155,7 @@
         <xsl:for-each
           select='reverse(max((1, $latest-post - $feed-length)) to $latest-post)'>
           <xsl:variable name='path'
-            select='concat($blog-path, "/", ., "/index", $suffix)'/>
+            select='concat($root, "/", $blog-path, "/", ., "/index", $suffix)'/>
           <xsl:if test='doc-available($path)'>
             <xsl:variable name='pdoc' select='doc($path)'/>
             <xsl:if test='not($pdoc/sb:post/@draft)'>

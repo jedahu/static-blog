@@ -7,8 +7,7 @@
   xmlns='http://www.w3.org/1999/xhtml'
   xpath-default-namespace='http://www.w3.org/1999/xhtml'
   exclude-result-prefixes='h sb a xs'>
-  <xsl:param name='sbrc'/>
-  <xsl:param name='latest-post' as='xs:integer' required='yes'/>
+  <xsl:param name='root'/>
   <xsl:output method='xml' indent='yes' name='xml'/>
   <xsl:output method='xhtml' indent='yes' name='xhtml'/>
   <xsl:output method='html' indent='yes' name='html'/>
@@ -20,6 +19,19 @@
   <xsl:include href='blog-index.xsl'/>
   <xsl:include href='entry.xsl'/>
   <xsl:include href='redirect.xsl'/>
+  <xsl:variable name='sbrc'>
+    <xsl:choose>
+      <xsl:when test='doc-available(concat($root, "/sbrc"))'>
+        <xsl:value-of select='concat($root, "/sbrc")'/>
+      </xsl:when>
+      <xsl:when test='doc-available(concat($root, "/sbrc.xml"))'>
+        <xsl:value-of select='concat($root, "/sbrc.xml")'/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message terminate='yes'>Error: no sbrc or sbrc.xml found.</xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:variable name='config' select='doc($sbrc)/sb:config'/>
   <xsl:variable name='domain'
     select='$config/sb:domain/text()'/>
@@ -28,7 +40,7 @@
   <xsl:variable name='feed-length' as='xs:integer'
     select='$config/sb:feed/sb:length/text()'/>
   <xsl:variable name='blog-path'
-    select='sb:content($config//sb:blog-path[1])'/>
+    select='concat($root, "/", sb:content($config//sb:blog-path[1]))'/>
   <xsl:variable name='suffix'
     select='concat(".", sb:content($config//sb:suffix[1]))'/>
   <xsl:variable name='html-suffix'
@@ -36,6 +48,24 @@
   <xsl:variable name='feed-path' select='concat($blog-path, "/feed/index.xml")'/>
   <xsl:variable name='latest-fragment-path' select='concat($blog-path, "/latest/index", $html-suffix)'/>
   <xsl:variable name='files' select='tokenize(/sb:files/text(), "\s+")'/>
+  <xsl:template name='find-latest-post'>
+    <xsl:param name='n' select='1'/>
+    <xsl:variable name='path' select='concat($blog-path, "/", $n, "/index.sb")'/>
+    <xsl:choose>
+      <xsl:when test='doc-available($path) and not(doc($path)/sb:post/@draft)'>
+        <xsl:call-template name='find-latest-post'>
+          <xsl:with-param name='n' select='$n + 1'/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message>Latest post is <xsl:value-of select='$n - 1'/></xsl:message>
+        <xsl:value-of select='$n - 1'/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <xsl:variable name='latest-post' as='xs:integer'>
+    <xsl:call-template name='find-latest-post'/>
+  </xsl:variable>
   <xsl:template match='/sb:files'>
     <xsl:call-template name='process-files'/>
     <xsl:call-template name='generate-feed'/>
@@ -47,9 +77,6 @@
       <xsl:if test='doc-available(.)'>
         <xsl:variable name='pdoc' select='doc(.)'/>
         <xsl:if test='not($pdoc/sb:post/@draft)'>
-          <xsl:message>
-            <xsl:value-of select='.'/>
-          </xsl:message>
           <xsl:choose>
             <xsl:when test='ends-with(., $suffix)'>
               <xsl:variable name='out-suffix'>

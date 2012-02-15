@@ -1,9 +1,15 @@
 #!/bin/bash
 
 set -e
-set -u
 CDPATH=''
-ROOT="${0%/*}/.."
+ROOT=$(pwd)
+if [ "$1" ]; then
+  if [ ${1:0:1} = '/' ]; then
+    ROOT="$1"
+  else
+    ROOT="$(pwd)/$1"
+  fi
+fi
 
 SAXON_URL=http://jedatwork.s3.amazonaws.com/blobs/saxon9he.jar
 
@@ -18,6 +24,7 @@ if [ ! -f "$CONF" ]; then
   echo "No sbrc found. Aborting.."
   exit 1
 fi
+echo "Config found: $CONF"
 
 LATEST='1'
 while [ -f "$ROOT/posts/$LATEST/index.sb" ]; do

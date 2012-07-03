@@ -92,7 +92,7 @@
               </xsl:variable>
               <xsl:variable name='path'
                 select='concat(substring(., 1, string-length(.) - string-length($suffix)), $out-suffix)'/>
-              <xsl:result-document href='{$path}' method='xhtml' format='html'
+              <xsl:result-document href='{$path}' method='html' format='html'
                 xml:base='..'>
                 <xsl:apply-templates select='$pdoc' mode='web'/>
               </xsl:result-document>
@@ -149,7 +149,7 @@
     </xsl:result-document>
   </xsl:template>
   <xsl:template name='generate-latest'>
-    <xsl:result-document href='{$root}/{$latest-fragment-path}' method='xhtml' format='html'
+    <xsl:result-document href='{$root}/{$latest-fragment-path}' method='html' format='html'
       xml:base='..'>
       <xsl:message>Generating latest fragment at <xsl:value-of select='$latest-fragment-path'/></xsl:message>
       <ul>

@@ -5,7 +5,7 @@
   xmlns:h='http://www.w3.org/1999/xhtml'
   xmlns='http://www.w3.org/1999/xhtml'
   xpath-default-namespace='http://www.w3.org/1999/xhtml'
-  exclude-result-prefixes='sb'>
+  exclude-result-prefixes='sb xsl xs h'>
   <xsl:include href='comments.xsl'/>
   <xsl:template match='/sb:post' mode='web'>
     <xsl:if test='not(matches(/sb:post/@n, "[0-9]+|draft"))'>
@@ -13,7 +13,7 @@
         /sb:post/@n required and must be a positive integer.
       </xsl:message>
     </xsl:if>
-    <html lang='EN' xml:lang='EN'>
+    <html lang='EN'>
       <xsl:call-template name='post-head'/>
       <xsl:call-template name='post-body'/>
     </html>

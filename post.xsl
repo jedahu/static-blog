@@ -49,12 +49,15 @@
   <xsl:template name='post-article-header'>
     <h1 class='entry-title' role='header'>
       <xsl:copy-of
-        copy-namespaces='no'
-        select='//sb:title[1]/node()'/>
+          copy-namespaces='no'
+          select='//sb:title[1]/node()'/>
       <xsl:if test='/sb:post/sb:summary'>
         <a class='note' href='#note-title'>*</a>
       </xsl:if>
     </h1>
+    <xsl:call-template name='post-article-header-line'/>
+  </xsl:template>
+  <xsl:template name='post-article-header-line'>
   </xsl:template>
   <!--xsl:template name='post-article-summary'>
     <xsl:if test='/sb:post/sb:summary'>
